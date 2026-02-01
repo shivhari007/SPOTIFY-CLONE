@@ -1,0 +1,72 @@
+/* About Page Styling */
+
+.aboutSection {
+  width: 60%;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 12px;
+  font-family: "Varela Round", sans-serif;
+}
+
+.aboutSection h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1db954;
+  font-size: 2.2rem;
+}
+
+.intro {
+  text-align: center;
+  color: #ccc;
+  font-size: 1.05rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.features {
+  display: flex;
+  gap: 20px;
+}
+
+.card {
+  flex: 1;
+  background-color: #111;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card h3 {
+  color: #1db954;
+  margin-bottom: 12px;
+}
+
+.card p {
+  color: #bbb;
+  font-size: 0.95rem;
+}
+
+.footerText {
+  margin-top: 35px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .aboutSection {
+    width: 90%;
+  }
+
+  .features {
+    flex-direction: column;
+  }
+}
