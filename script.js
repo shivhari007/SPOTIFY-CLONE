@@ -1,14 +1,4 @@
-// 1. AUTH CHECK (Runs immediately)
-const path = window.location.pathname;
-const page = path.split("/").pop();
-const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-// If not logged in and not on the login page, redirect
-if (page !== "login.html" && page !== "" && !isLoggedIn) {
-  window.location.replace("./login.html");
-}
-
-// 2. GLOBAL VARIABLES & DATA
+// 1. GLOBAL VARIABLES & DATA
 let songIndex = 0;
 let audioElement = new Audio();
 let songs = [
