@@ -1,17 +1,17 @@
-const page = window.location.pathname.split("/").pop();
+// ================= AUTH CHECK =================
+const path = window.location.pathname;
+const page = path.split("/").pop();
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-// run auth check ONLY on protected pages
-if (page !== "login.html" && localStorage.getItem("isLoggedIn") !== "true") {
+// Corrected Logic: Only redirect if NOT on login.html AND NOT already logged in
+// We also check if page is empty (which means the user is at the root "/")
+if (page !== "login.html" && page !== "" && !isLoggedIn) {
   window.location.replace("./login.html");
 }
 
+// ================= AUDIO ENGINE =================
 let songIndex = 0;
 let audioElement = new Audio();
-let masterPlay = document.getElementById("masterPlay");
-let myProgressBar = document.getElementById("myProgressBar");
-let gif = document.getElementById("gif");
-let songItems = Array.from(document.getElementsByClassName("songitem"));
-
 // ================= SONG DATA =================
 let songs = [
   {
