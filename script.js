@@ -14,33 +14,63 @@ let songItems = Array.from(document.getElementsByClassName("songitem"));
 let songs = [
   {
     songName: "Salam-e-Ishq",
-    filePath: "songs/1.mp3",
-    coverPath: "covers/1.jpg",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010692/1_h6xwco.mp3",
+    coverPath: "img/1.jpg",
   },
-  { songName: "Wariyo", filePath: "songs/2.mp3", coverPath: "covers/2.jpg" },
-  { songName: "Deaf Kev", filePath: "songs/3.mp3", coverPath: "covers/3.jpg" },
+  {
+    songName: "Wariyo",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010715/4_nws53r.mp3",
+    coverPath: "img/2.jpg",
+  },
+  {
+    songName: "Deaf Kev",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010692/2_dtnufu.mp3",
+    coverPath: "img/3.jpg",
+  },
   {
     songName: "Janji-Heroes",
-    filePath: "songs/4.mp3",
-    coverPath: "covers/4.jpg",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010695/5_m7bxhw.mp3",
+    coverPath: "img/4.jpg",
   },
-  { songName: "Sakiyaan", filePath: "songs/5.mp3", coverPath: "covers/5.jpg" },
+  {
+    songName: "Sakiyaan",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010696/9_jpsmoo.mp3",
+    coverPath: "img/5.jpg",
+  },
   {
     songName: "Bhula dena",
-    filePath: "songs/6.mp3",
-    coverPath: "covers/6.jpg",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010696/7_pdkbfe.mp3",
+    coverPath: "img/6.jpg",
   },
   {
     songName: "Tumhari kasam",
-    filePath: "songs/7.mp3",
-    coverPath: "covers/7.jpg",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010699/10_vgj0ru.mp3",
+    coverPath: "img/7.jpg",
   },
-  { songName: "Tum hi Ho", filePath: "songs/8.mp3", coverPath: "covers/8.jpg" },
-  { songName: "Rabba", filePath: "songs/9.mp3", coverPath: "covers/9.jpg" },
+  {
+    songName: "Tum hi Ho",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010699/3_ek5rrq.mp3",
+    coverPath: "img/8.jpg",
+  },
+  {
+    songName: "Rabba",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010704/8_wlddkg.mp3",
+    coverPath: "img/9.jpg",
+  },
   {
     songName: "Extra Song",
-    filePath: "songs/10.mp3",
-    coverPath: "covers/10.jpg",
+    filePath:
+      "https://res.cloudinary.com/djcdyt7zl/video/upload/v1770010708/6_cbo3se.mp3",
+    coverPath: "img/10.jpg",
   },
 ];
 
@@ -56,7 +86,7 @@ songItems.forEach((element, i) => {
 // ================= HELPERS =================
 const makeAllPlays = () => {
   Array.from(document.getElementsByClassName("songItemPlay")).forEach((el) => {
-    el.src = "covers/play-button.png";
+    el.src = "img/play-button.png";
   });
 };
 
@@ -66,15 +96,15 @@ const playSong = () => {
   audioElement.currentTime = 0;
   audioElement.play();
 
-  masterPlay.src = "covers/pause-button.png";
-  document.getElementById(songIndex).src = "covers/pause-button.png";
+  masterPlay.src = "img/pause-button.png";
+  document.getElementById(songIndex).src = "img/pause-button.png";
   gif.style.opacity = 1;
 };
 
 const pauseSong = () => {
   audioElement.pause();
-  masterPlay.src = "covers/play-button.png";
-  document.getElementById(songIndex).src = "covers/play-button.png";
+  masterPlay.src = "img/play-button.png";
+  document.getElementById(songIndex).src = "img/play-button.png";
   gif.style.opacity = 0;
 };
 
@@ -134,5 +164,3 @@ audioElement.addEventListener("ended", () => {
   songIndex = (songIndex + 1) % songs.length;
   playSong();
 });
-
-
