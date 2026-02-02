@@ -1,6 +1,8 @@
-// AUTH CHECK
-if (localStorage.getItem("isLoggedIn") !== "true") {
-  window.location.href = "login.html";
+const page = window.location.pathname.split("/").pop();
+
+// run auth check ONLY on protected pages
+if (page !== "login.html" && localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.replace("./login.html");
 }
 
 let songIndex = 0;
