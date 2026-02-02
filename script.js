@@ -1,18 +1,16 @@
-// ================= AUTH CHECK =================
+// 1. AUTH CHECK (Runs immediately)
 const path = window.location.pathname;
 const page = path.split("/").pop();
 const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-// Corrected Logic: Only redirect if NOT on login.html AND NOT already logged in
-// We also check if page is empty (which means the user is at the root "/")
+// If not logged in and not on the login page, redirect
 if (page !== "login.html" && page !== "" && !isLoggedIn) {
   window.location.replace("./login.html");
 }
 
-// ================= AUDIO ENGINE =================
+// 2. GLOBAL VARIABLES & DATA
 let songIndex = 0;
 let audioElement = new Audio();
-// ================= SONG DATA =================
 let songs = [
   {
     songName: "Salam-e-Ishq",
@@ -76,93 +74,105 @@ let songs = [
   },
 ];
 
-// ================= POPULATE SONG LIST =================
-songItems.forEach((element, i) => {
-  if (!songs[i]) return;
+// 3. WAIT FOR DOM TO BE READY
+window.addEventListener("DOMContentLoaded", () => {
+  // Define UI elements
+  const masterPlay = document.getElementById("masterPlay");
+  const myProgressBar = document.getElementById("myProgressBar");
+  const gif = document.getElementById("gif");
+  const songItems = Array.from(document.getElementsByClassName("songitem"));
 
-  element.getElementsByTagName("img")[0].src = songs[i].coverPath;
-  element.getElementsByClassName("songName")[0].innerText = songs[i].songName;
-  element.querySelector(".songItemPlay").id = i;
-});
-
-// ================= HELPERS =================
-const makeAllPlays = () => {
-  Array.from(document.getElementsByClassName("songItemPlay")).forEach((el) => {
-    el.src = "img/play-button.png";
-  });
-};
-
-const playSong = () => {
-  makeAllPlays();
-  audioElement.src = songs[songIndex].filePath;
-  audioElement.currentTime = 0;
-  audioElement.play();
-
-  masterPlay.src = "img/pause-button.png";
-  document.getElementById(songIndex).src = "img/pause-button.png";
-  gif.style.opacity = 1;
-};
-
-const pauseSong = () => {
-  audioElement.pause();
-  masterPlay.src = "img/play-button.png";
-  document.getElementById(songIndex).src = "img/play-button.png";
-  gif.style.opacity = 0;
-};
-
-// ================= MASTER PLAY =================
-masterPlay.addEventListener("click", () => {
-  if (audioElement.paused) {
-    playSong();
-  } else {
-    pauseSong();
-  }
-});
-
-// ================= SONG ITEM PLAY =================
-Array.from(document.getElementsByClassName("songItemPlay")).forEach(
-  (element) => {
-    element.addEventListener("click", (e) => {
-      let clickedIndex = parseInt(e.target.id);
-
-      if (songIndex === clickedIndex && !audioElement.paused) {
-        pauseSong();
-      } else {
-        songIndex = clickedIndex;
-        playSong();
-      }
-    });
-  },
-);
-
-// ================= PROGRESS BAR =================
-audioElement.addEventListener("timeupdate", () => {
-  if (!isNaN(audioElement.duration)) {
-    myProgressBar.value = parseInt(
-      (audioElement.currentTime / audioElement.duration) * 100,
+  // ================= HELPERS =================
+  const makeAllPlays = () => {
+    Array.from(document.getElementsByClassName("songItemPlay")).forEach(
+      (el) => {
+        el.src = "img/play-button.png";
+      },
     );
-  }
-});
+  };
 
-myProgressBar.addEventListener("change", () => {
-  audioElement.currentTime =
-    (myProgressBar.value * audioElement.duration) / 100;
-});
+  const playSong = () => {
+    makeAllPlays();
+    audioElement.src = songs[songIndex].filePath;
+    audioElement.currentTime = 0;
+    audioElement.play();
 
-// ================= NEXT =================
-document.getElementById("next").addEventListener("click", () => {
-  songIndex = (songIndex + 1) % songs.length;
-  playSong();
-});
+    masterPlay.src = "img/pause-button.png";
+    // Update the specific icon in the list
+    const currentListItemPlay = document.getElementById(songIndex);
+    if (currentListItemPlay) currentListItemPlay.src = "img/pause-button.png";
+    gif.style.opacity = 1;
+  };
 
-// ================= PREVIOUS =================
-document.getElementById("previous").addEventListener("click", () => {
-  songIndex = songIndex <= 0 ? songs.length - 1 : songIndex - 1;
-  playSong();
-});
+  const pauseSong = () => {
+    audioElement.pause();
+    masterPlay.src = "img/play-button.png";
+    const currentListItemPlay = document.getElementById(songIndex);
+    if (currentListItemPlay) currentListItemPlay.src = "img/play-button.png";
+    gif.style.opacity = 0;
+  };
 
-// ================= AUTO NEXT ON END =================
-audioElement.addEventListener("ended", () => {
-  songIndex = (songIndex + 1) % songs.length;
-  playSong();
+  // ================= INITIALIZE UI =================
+  songItems.forEach((element, i) => {
+    if (!songs[i]) return;
+    element.getElementsByTagName("img")[0].src = songs[i].coverPath;
+    element.getElementsByClassName("songName")[0].innerText = songs[i].songName;
+    element.querySelector(".songItemPlay").id = i;
+  });
+
+  // ================= EVENT LISTENERS =================
+  masterPlay.addEventListener("click", () => {
+    if (audioElement.paused || audioElement.currentTime <= 0) {
+      playSong();
+    } else {
+      pauseSong();
+    }
+  });
+
+  // Song Item Clicks
+  Array.from(document.getElementsByClassName("songItemPlay")).forEach(
+    (element) => {
+      element.addEventListener("click", (e) => {
+        let clickedIndex = parseInt(e.target.id);
+        if (songIndex === clickedIndex && !audioElement.paused) {
+          pauseSong();
+        } else {
+          songIndex = clickedIndex;
+          playSong();
+        }
+      });
+    },
+  );
+
+  // Progress Bar
+  audioElement.addEventListener("timeupdate", () => {
+    if (!isNaN(audioElement.duration)) {
+      myProgressBar.value = parseInt(
+        (audioElement.currentTime / audioElement.duration) * 100,
+      );
+    }
+  });
+
+  myProgressBar.addEventListener("change", () => {
+    audioElement.currentTime =
+      (myProgressBar.value * audioElement.duration) / 100;
+  });
+
+  // Next Button
+  document.getElementById("next").addEventListener("click", () => {
+    songIndex = (songIndex + 1) % songs.length;
+    playSong();
+  });
+
+  // Previous Button
+  document.getElementById("previous").addEventListener("click", () => {
+    songIndex = songIndex <= 0 ? songs.length - 1 : songIndex - 1;
+    playSong();
+  });
+
+  // Auto-Next
+  audioElement.addEventListener("ended", () => {
+    songIndex = (songIndex + 1) % songs.length;
+    playSong();
+  });
 });
